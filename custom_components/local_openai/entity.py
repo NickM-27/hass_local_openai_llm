@@ -230,8 +230,6 @@ class LocalAiEntity(Entity):
 
     _attr_has_entity_name = True
 
-    _last_timings = {}
-
     def __init__(self, entry: LocalAiConfigEntry, subentry: ConfigSubentry) -> None:
         """Initialize the entity."""
         self.entry = entry

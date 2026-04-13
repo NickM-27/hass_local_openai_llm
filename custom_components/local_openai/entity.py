@@ -439,6 +439,10 @@ class LocalAiEntity(Entity):
             "model": self.model,
             "temperature": temperature,
             "parallel_tool_calls": parallel_tool_calls,
+            "extra_headers": {
+                "HTTP-Referer": "https://github.com/skye-harris/hass_local_openai_llm",
+                "X-Title": "Home Assistant",
+            },
         }
 
         tools: list[ChatCompletionFunctionToolParam] | None = None

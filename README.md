@@ -402,7 +402,7 @@ I would like to thank the following people for their contributions to this proje
 <tr>
   <td align="center"><a href="https://github.com/NickM-27"><img src="https://avatars.githubusercontent.com/u/14866235?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/NickM-27">NickM-27</a></b></sub></td>
   <td align="center"><a href="https://github.com/JulienDeveaux"><img src="https://avatars.githubusercontent.com/u/73243388?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/JulienDeveaux">JulienDeveaux</a></b></sub></td>
-  <td align="center"><a href="https://github.com/BryanCLieberman"><img src="https://avatars.githubusercontent.com/u/205995085?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/BryanCLieberman">BryanCLieberman</a></b></sub></td>
+  <td align="center"><a href="https://github.com/VysseCodes"><img src="https://avatars.githubusercontent.com/u/205995085?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/VysseCodes">VysseCodes</a></b></sub></td>
   <td align="center"><a href="https://github.com/PollyBot13"><img src="https://avatars.githubusercontent.com/u/261872620?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/PollyBot13">PollyBot13</a></b></sub></td>
   <td align="center"><a href="https://github.com/srwalter"><img src="https://avatars.githubusercontent.com/u/79127?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/srwalter">srwalter</a></b></sub></td>
   <td align="center"><a href="https://github.com/alexjurkiewicz"><img src="https://avatars.githubusercontent.com/u/379509?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/alexjurkiewicz">alexjurkiewicz</a></b></sub></td>
@@ -420,6 +420,7 @@ I would like to thank the following people for their contributions to this proje
   <td align="center"><a href="https://github.com/Thyraz"><img src="https://avatars.githubusercontent.com/u/170099?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/Thyraz">Thyraz</a></b></sub></td>
   <td align="center"><a href="https://github.com/jgancedo"><img src="https://avatars.githubusercontent.com/u/17992965?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/jgancedo">jgancedo</a></b></sub></td>
   <td align="center"><a href="https://github.com/geryduyck"><img src="https://avatars.githubusercontent.com/u/36077321?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/geryduyck">geryduyck</a></b></sub></td>
+  <td align="center"><a href="https://github.com/dudanogueira"><img src="https://avatars.githubusercontent.com/u/1761174?v=4" width="64" height="64" style="border-radius:50%"></a><br><sub><b><a href="https://github.com/dudanogueira">dudanogueira</a></b></sub></td>
 </tr>
 </table>
 

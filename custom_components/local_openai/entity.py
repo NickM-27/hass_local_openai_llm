@@ -860,6 +860,7 @@ class LocalAiEntity(Entity):
     ) -> bool:
         """Run the LLM agent loop with tool call iteration."""
         halt_requested = False
+        halt_speech = ""
         strip_emojis = self.options.get(CONF_STRIP_EMOJIS)
 
         for iteration in range(MAX_TOOL_ITERATIONS):
@@ -900,18 +901,18 @@ class LocalAiEntity(Entity):
                 ]
 
                 # Check for stop_talking tool call before merging into message chain
-                if not halt_requested:
-                    for content in turn_messages:
-                        if (
-                            isinstance(content, conversation.AssistantContent)
-                            and content.tool_calls
-                        ):
-                            halt_requested = any(
-                                tool
-                                for tool in content.tool_calls
-                                if tool.tool_name == TOOL_NAME_STOP_TALKING
-                            )
-                            break
+                for content in turn_messages:
+                    if (
+                        isinstance(content, conversation.AssistantContent)
+                        and content.tool_calls
+                    ):
+                        halt_requested = any(
+                            tool
+                            for tool in content.tool_calls
+                            if tool.tool_name == TOOL_NAME_STOP_TALKING
+                        )
+                        halt_speech = content.content or ""
+                        break
 
                 model_args["messages"].extend(
                     [
@@ -984,6 +985,18 @@ class LocalAiEntity(Entity):
                 _LOGGER.exception("Error handling API response")
                 msg = "Error handling API response. Check the system logs for further details."
                 raise HomeAssistantError(msg) from err
+
+            if halt_requested:
+                # Don't hand the stop_talking result back to the model, or it will
+                # generate another reply. The chat log must still end on assistant
+                # content, otherwise HA fails the turn with "Unable to get response".
+                chat_log.async_add_assistant_content_without_tools(
+                    conversation.AssistantContent(
+                        agent_id=self.entity_id,
+                        content=halt_speech,
+                    )
+                )
+                break
 
             if not chat_log.unresponded_tool_results:
                 break

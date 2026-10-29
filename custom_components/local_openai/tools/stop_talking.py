@@ -13,7 +13,11 @@ class StopTalkingTool(llm.Tool):
     integration = DOMAIN
 
     name = TOOL_NAME_STOP_TALKING
-    description = "Call this tool by itself if the user has requested that you stop talking or 'shut up'"
+    description = (
+        "Call this tool by itself if the user has requested that you stop talking or 'shut up'. "
+        "You will not get to respond after calling it, "
+        "so put any brief acknowledgement in the same reply."
+    )
     parameters = probatio.Schema({})
 
     async def async_call(

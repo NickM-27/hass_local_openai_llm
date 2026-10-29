@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import pytest
+from custom_components.local_openai.const import TOOL_NAME_STOP_TALKING
 from custom_components.local_openai.conversation import LocalAiConversationEntity
+from custom_components.local_openai.entity import AgentContext
 from custom_components.local_openai.tools.stop_talking import StopTalkingTool
 from homeassistant.components import conversation
 from homeassistant.core import HomeAssistant
@@ -146,3 +149,81 @@ class TestStopTalkingSetsContinueConversation:
             )
 
         assert result.continue_conversation is True
+
+
+class TestStopTalkingEndsAgentLoop:
+    """Test that a stop_talking call ends the agent loop."""
+
+    @pytest.mark.parametrize(
+        ("spoken", "expected_speech"),
+        [("Okay.", "Okay."), (None, "")],
+    )
+    async def test_stop_talking_skips_follow_up_generation(
+        self,
+        hass: HomeAssistant,
+        mock_conversation_entity: LocalAiConversationEntity,
+        spoken: str | None,
+        expected_speech: str,
+    ) -> None:
+        """Test the model is not called again and the turn ends on assistant content."""
+        entity = mock_conversation_entity
+
+        def create_side_effect(**kwargs) -> MagicMock:
+            mock_stream = MagicMock()
+
+            async def async_gen():
+                return
+                yield
+
+            mock_stream.__aiter__ = MagicMock(return_value=async_gen())
+            return mock_stream
+
+        entity.entry.runtime_data.chat.completions.create = AsyncMock(
+            side_effect=create_side_effect
+        )
+
+        chat_log = MagicMock(spec=conversation.ChatLog)
+        chat_log.content = []
+        chat_log.async_add_assistant_content_without_tools = chat_log.content.append
+
+        async def stream_content(entity_id, stream_gen):
+            async for _ in stream_gen:
+                pass
+            for content in (
+                conversation.AssistantContent(
+                    agent_id=entity_id,
+                    content=spoken,
+                    tool_calls=[
+                        llm.ToolInput(
+                            id="call_1",
+                            tool_name=TOOL_NAME_STOP_TALKING,
+                            tool_args={},
+                        )
+                    ],
+                ),
+                conversation.ToolResultContent(
+                    agent_id=entity_id,
+                    tool_call_id="call_1",
+                    tool_name=TOOL_NAME_STOP_TALKING,
+                    result=llm.ToolResult(data={}),
+                ),
+            ):
+                chat_log.content.append(content)
+                yield content
+
+        chat_log.async_add_delta_content_stream = stream_content
+        chat_log.unresponded_tool_results = True
+
+        halt_requested = await entity._run_agent_loop(
+            entity.entry.runtime_data,
+            {"model": "test", "messages": []},
+            chat_log,
+            context=AgentContext(),
+        )
+
+        assert halt_requested is True
+        entity.entry.runtime_data.chat.completions.create.assert_called_once()
+        last_content = chat_log.content[-1]
+        assert isinstance(last_content, conversation.AssistantContent)
+        assert last_content.content == expected_speech
+        assert last_content.tool_calls is None
